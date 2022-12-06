@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import { Component } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import MarvelService from '../../services/MarvelService';
@@ -11,11 +11,10 @@ class CharList extends Component {
         loading: true,
         error: false
     }
-    
+
     marvelService = new MarvelService();
 
     componentDidMount() {
-        console.log('mount');
         this.marvelService.getAllCharacters()
             .then(this.onCharListLoaded)
             .catch(this.onError)
@@ -38,18 +37,19 @@ class CharList extends Component {
     // Этот метод создан для оптимизации, 
     // чтобы не помещать такую конструкцию в метод render
     renderItems(arr) {
-        const items =  arr.map((item) => {
-            let imgStyle = {'objectFit' : 'cover'};
+        const items = arr.map((item) => {
+            let imgStyle = { 'objectFit': 'cover' };
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-                imgStyle = {'objectFit' : 'unset'};
+                imgStyle = { 'objectFit': 'unset' };
             }
-            
+
             return (
-                <li 
+                <li
                     className="char__item"
-                    key={item.id}>
-                        <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
-                        <div className="char__name">{item.name}</div>
+                    key={item.id}
+                    onClick={() => this.props.onCharSelected(item.id)}>
+                    <img src={item.thumbnail} alt={item.name} style={imgStyle} />
+                    <div className="char__name">{item.name}</div>
                 </li>
             )
         });
@@ -63,12 +63,12 @@ class CharList extends Component {
 
     render() {
 
-        const {charList, loading, error} = this.state;
-        
+        const { charList, loading, error } = this.state;
+
         const items = this.renderItems(charList);
 
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const spinner = loading ? <Spinner/> : null;
+        const errorMessage = error ? <ErrorMessage /> : null;
+        const spinner = loading ? <Spinner /> : null;
         const content = !(loading || error) ? items : null;
 
         return (
